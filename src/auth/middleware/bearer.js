@@ -15,6 +15,7 @@ module.exports = async (req, res, next) => {
 
     req.user = validUser;
     req.token = validUser.token;
+    next(); //move on to the next middleware
 
   } catch (error) {
     console.error(error);
