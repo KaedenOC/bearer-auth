@@ -1,6 +1,6 @@
 'use strict';
 
-process.env.SECRET = "TEST_SECRET";
+process.env.SECRET = 'TEST_SECRET';
 
 const { handleSecret } = require('../../../../../src/auth/router/handlers.js');
 

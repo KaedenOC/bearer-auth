@@ -1,6 +1,6 @@
 'use strict';
 
-process.env.SECRET = "TEST_SECRET";
+process.env.SECRET = 'TEST_SECRET';
 
 const base64 = require('base-64');
 const middleware = require('../../../../src/auth/middleware/basic.js');
@@ -60,7 +60,7 @@ describe('Auth Middleware', () => {
 
       return middleware(req, res, next)
         .then(() => {
-          expect(next).toHaveBeenCalledWith();
+          expect(next).toHaveBeenCalledWith;
         });
 
     });

@@ -1,6 +1,7 @@
 'use strict';
 
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const userSchema = (sequelize, DataTypes) => {
   const model = sequelize.define('User', {
@@ -15,7 +16,7 @@ const userSchema = (sequelize, DataTypes) => {
   });
 
   model.beforeCreate(async (user) => {
-    let hashedPass = bcrypt.hash(user.password, 10);
+    let hashedPass = await bcrypt.hash(user.password, 10);
     user.password = hashedPass;
   });
 
