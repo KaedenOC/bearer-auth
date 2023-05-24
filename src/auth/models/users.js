@@ -2,6 +2,7 @@
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const SECRET = process.env.SECRET;
 
 const userSchema = (sequelize, DataTypes) => {
   const model = sequelize.define('User', {
@@ -10,7 +11,7 @@ const userSchema = (sequelize, DataTypes) => {
     token: {
       type: DataTypes.VIRTUAL,
       get() {
-        return jwt.sign({ username: this.username });
+        return jwt.sign({ username: this.username }, SECRET);
       },
     },
   });
@@ -22,17 +23,17 @@ const userSchema = (sequelize, DataTypes) => {
 
   // Basic AUTH: Validating strings (username, password)
   model.authenticateBasic = async function (username, password) {
-    const user = await this.findOne({ username });
+    const user = await this.findOne({where: { username } });
     const valid = await bcrypt.compare(password, user.password);
     if (valid) { return user; }
     throw new Error('Invalid User');
-  }
+  };
 
   // Bearer AUTH: Validating a token
   model.authenticateToken = async function (token) {
     try {
       const parsedToken = jwt.verify(token, process.env.SECRET);
-      const user = this.findOne({ username: parsedToken.username })
+      const user = await this.findOne({where: { username: parsedToken.username } });
       if (user) { return user; }
       throw new Error('User Not Found');
     } catch (e) {
